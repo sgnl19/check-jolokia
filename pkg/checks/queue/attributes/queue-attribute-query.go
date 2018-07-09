@@ -5,6 +5,7 @@ import (
 	"github.com/benkeil/icinga-checks-library"
 	"github.com/s8sg/go_jolokia"
 	"github.com/sgnl04/check-jolokia/pkg/utils"
+	"log"
 )
 
 type (
@@ -51,6 +52,9 @@ func (c *checkQueueAttributeImpl) CheckQueueAttributeQuery(options CheckQueueAtt
 
 	result, err := utils.ToFloat(searchResult)
 	if err != nil {
+		if (options.Verbose > 0) {
+			log.Printf("An error occured with result [%v]", searchResult)
+		}
 		return icinga.NewResult(name, icinga.ServiceStatusUnknown, fmt.Sprintf("query result is invalid: %v", err))
 	}
 
