@@ -9,15 +9,16 @@ import (
 
 type (
 	checkQueueAttributeCmd struct {
-		out           io.Writer
-		JolokiaClient go_jolokia.JolokiaClient
-		Warning       string
-		Critical      string
-		Url           string
-		Domain        string
-		Queue         string
-		Attribute     string
-		Verbose       int
+		out                io.Writer
+		JolokiaClient      go_jolokia.JolokiaClient
+		Warning            string
+		Critical           string
+		Url                string
+		Domain             string
+		Queue              string
+		Attribute          string
+		OkIfQueueIsMissing string
+		Verbose            int
 	}
 )
 
@@ -44,6 +45,7 @@ func newCheckQueueAttributeCmd(out io.Writer) *cobra.Command {
 	cmd.Flags().StringVarP(&c.Domain, "domain", "d", "org.apache.activemq.artemis", "the domain of the queue to query")
 	cmd.Flags().StringVarP(&c.Queue, "queue", "q", "*", "the queue to query")
 	cmd.Flags().StringVarP(&c.Attribute, "attribute", "a", "*", "the attributes to query from the queue")
+	cmd.Flags().StringVarP(&c.OkIfQueueIsMissing, "ok_if_queue_is_missing", "o", "*", "search this queue first and return ok if it is missing")
 	cmd.Flags().CountVarP(&c.Verbose, "verbose", "v", "enable verbose output")
 
 	return cmd
@@ -52,13 +54,14 @@ func newCheckQueueAttributeCmd(out io.Writer) *cobra.Command {
 func (c *checkQueueAttributeCmd) run() {
 	checkQueueAttribute := attributes.NewCheckQueueAttribute(c.JolokiaClient, c.Url)
 	results := checkQueueAttribute.CheckQueueAttributeQuery(attributes.CheckQueueAttributeOptions{
-		ThresholdWarning:  c.Warning,
-		ThresholdCritical: c.Critical,
-		Url:               c.Url,
-		Domain:            c.Domain,
-		Queue:             c.Queue,
-		Attribute:         c.Attribute,
-		Verbose:           c.Verbose,
+		ThresholdWarning:   c.Warning,
+		ThresholdCritical:  c.Critical,
+		Url:                c.Url,
+		Domain:             c.Domain,
+		Queue:              c.Queue,
+		Attribute:          c.Attribute,
+		OkIfQueueIsMissing: c.OkIfQueueIsMissing,
+		Verbose:            c.Verbose,
 	})
 	results.Exit()
 }
