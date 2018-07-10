@@ -31,6 +31,7 @@ check-jolokia queueAttribute http://<username>:<password>@<url>:<port>/console/j
 | --critical | -c | critical threshold for minimum amount of result (default "10:") |
 | --domain | -d | the domain of the queue to query (default "org.apache.activemq.artemis") |
 | --help | -h | Help for queueAttribute |
+| --ok_if_queue_is_missing | -o | The queue to search first and return OK is missing (default "*") |
 | --queue | -q | The queue to query (default "*") |
 | --warning | -w | Warning threshold for minimum amount of result (default "5:") |
 
